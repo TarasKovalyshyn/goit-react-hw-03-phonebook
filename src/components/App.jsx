@@ -13,11 +13,24 @@ class App extends Component {
     ],
     filter: '',
   };
+  componentDidMount() {
+    const contact = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contact);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contact) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   // За допомогою методу "addContact" ми будемо додавати нові контакти.
   // Для цього нам потрібно створити новий масив, в масиві створюємо новий обєкт, в якому генеруємо унікальний "id",
   // розпиляємо об'єкт, який отримали в "contact", після чого ми розпиляємо старий масив "contacts" зі "prevState",
   // тобто попереднього "state"
-
   addContact = contact => {
     // Методом 'some' перебираємо масив, робимо до нижнього регістру, після чого прирівнюємо
     // значення 'name' зі "state" та то яке ми отримали з інпуту у 'Filter',
@@ -57,20 +70,6 @@ class App extends Component {
       };
     });
   };
-  componentDidMount() {
-    const contact = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contact);
-    if (parsedContacts) {
-    this.setState({ contacts: parsedContacts });
-      
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contact) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
 
   render() {
     const { filter } = this.state;
